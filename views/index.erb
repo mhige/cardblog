@@ -1,10 +1,21 @@
+<div class="py-4">
+  <% if !@user.nil? %>
+    <p class="text-center">ようこそ <a href="/user/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
+    <p class="text-center"><a class="text-center btn btn-primary" href="/logout">ログアウト</a></p>
+  <% else %>
+    <p class="text-center"><a class="btn btn-primary" href="/login">ログイン</a> or
+      <a class="btn btn-primary" href="/register">新規登録</a></p>
+  <% end %>
+</div>
+
 <h1 class="text-center py-4">card blog</h1>
 
-
-<!-- Button trigger modal -->
-<p class="text-center py-4">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-post">新規投稿</button>
-</p>
+<% if !@user.nil? %>
+  <!-- Button trigger modal -->
+  <p class="text-center py-4">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-post">新規投稿</button>
+  </p>
+<% end %>
 
 <div class="container">
   <div class="row">
@@ -17,48 +28,42 @@
               <div class="card-style is-surface">
                 <div class="card_surface">
                   <div class="container">
-                    <img class="th" src="img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
+                    <img class="th" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
                   </div>
                 </div>
                 <div class="card_reverse">
                   <div class="container">
                     <section class="post-body">
                       <h1 class="post-title"><%= post['title'] %></h1>
-                      <p><img class="th" src="img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/></p>
+                      <p>Posts by <a href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
+                      <p><img class="th" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/></p>
                       <p><%= post['body'] %></p>
                     </section>
                   </div>
                 </div>
               </div>
-              <button class="turncard turn-btn"><i class="fas fa-arrows-alt-h"></i>めくる</button>
+              <div class="d-flex flex-row flex-grow-0 justify-content-center">
+                <button class="turncard turn-btn"><i class="fas fa-arrows-alt-h"></i>めくる</button>
+                <% if post['user_id'] == session['user_id'] %>
+                  <form action="/delete" method="post" enctype="multipart/form-data">
+                    <input value="<%= post['id'] %>" name="post_id" class="d-none">
+                    <button type="submit" class="turn-btn"><i class="fas fa-trash-alt"></i></i>削除</button>
+                  </form>
+                <% end %>
+              </div>
             </article>
           <% end %>
         </div>
       </section>
     </div>
-
-    <!--    <div class="col-12 overlay">-->
-    <!--      <section id="new-post">-->
-    <!--        <h1 id="new-post" class="text-center">新規投稿</h1>-->
-
-    <!--        <div class="row">-->
-    <!--          <div class="col-12">-->
-    <!--            <form action="/" method="post" enctype="multipart/form-data" class="">-->
-    <!--              <label>タイトル</label>-->
-    <!--              <input type="text" class="form-control" name="title">-->
-    <!--              <br>-->
-    <!--              <label>内容</label>-->
-    <!--              <textarea class="form-control" name="body"></textarea>-->
-    <!--              <br>-->
-    <!--              <label>メイン画像</label>-->
-    <!--              <input type="file" class="form-control" name="file">-->
-    <!--              <br>-->
-    <!--              <button type="submit" class="btn btn-success btn">投稿</button>-->
-    <!--            </form>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </section>-->
-    <!--    </div>-->
+    <% if @new_posts_data.size < 10 %>
+    <% else %>
+      <div class="col-12">
+        <p class="text-center">
+          <a class="btn btn-primary" href="/page/<%= @page + 1 %>">もっとみる</a>
+        </p>
+      </div>
+    <% end %>
   </div>
 </div>
 

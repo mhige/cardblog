@@ -17,51 +17,181 @@ def db
   )
 end
 
-#カードブログ
+#ユーザーIDをセット
+def set_user
+  return nil if session[:user_id].nil?
+  @user = db.xquery("SELECT * From users WHERE id = ?", session[:user_id]).to_a.first
+end
+
+# ログインしているか否か
+def login?
+  !session[:user_id].nil?
+end
+
+
+#カードブログのアプリ
 class CardBlog < Sinatra::Base
   #reloader
   configure :development do
     register Sinatra::Reloader
   end
 
-# publicフォルダの設定
+  # セッション
+  enable :sessions
+
+  # publicフォルダの設定
   set :public_folder, File.dirname(__FILE__) + '/public'
 
-# ルーティング(Routes)
-# layout.erbは自動で読み込まれる
-# index.erb 読み込み
+  # トップページ
   get '/' do
+    # ログイン確認とユーザーセット
+    if login?
+      set_user
+    end
+    #現在のページ数
+    @page = 1
     # 新着投稿を10件取得
-    @new_posts_data = db.xquery("SELECT * From posts ORDER BY created_at DESC").to_a
+    @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id  ORDER BY posts.created_at DESC LIMIT 10").to_a
 
     erb :index
   end
 
-#新規投稿ページ（indexにあるので今のところ使わない）
+  # ページネーション
+  get '/page/:page_number' do
+    # 現在のページ数を取得
+    # パラメータの数字を受け取る
+    @page = params[:page_number].to_i
+    # MySQLのオフセットの数
+    @offset_num = (@page - 1) * 10
+
+    redirect '/' if @page == 1
+    # 該当ページから新着投稿を10件取得
+    @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 10 OFFSET #{@offset_num} ").to_a
+
+    erb :index
+  end
+
+  #ユーザーのページ
+  get '/user/:user_name' do
+    # URLに入れたパラメータをユーザー名を渡す
+    @user_name = params[:user_name]
+
+    # URLに入れたパラメータの
+    # user_idがあるか取得してみる
+    @user_id = db.xquery("SELECT id From users WHERE user_name = ?", @user_name ).to_a.first
+
+    if !@user_id.nil?
+      # 新着投稿を10件取得
+      @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id WHERE users.id = ? ", @user_id['id']).to_a
+
+      erb :user
+    else
+      redirect '/'
+    end
+  end
+
+  #新規投稿
+  # （indexにあるので今のところ使わない）
   # get '/post' do
   #   erb :post
   # end
 
-#新規投稿
   post '/' do
+    #投稿者のIDをセッションから取得
+    @user_id = session[:user_id]
 
     # 画像情報を取得
     @filename = params[:file][:filename]
     file = params[:file][:tempfile]
 
     # 画像をディレクトリに配置
-    File.open("./public/img/#{@filename}", 'wb') do |f|
+    File.open("./public/img/#{@filename}", 'w') do |f|
       f.write(file.read)
     end
 
+    #タイトルと記事本文を変数に入れる
     @title = params[:title];
     @body = params[:body];
 
-    db.xquery("INSERT INTO posts(created_at, update_at, title, body, main_image_url)
-VALUES(cast(now() as datetime), cast(now() as datetime), '#{@title}', '#{@body}', '#{@filename}')")
+    # DBに書き込み
+    db.xquery("INSERT INTO posts(created_at, update_at, title, body, main_image_url, user_id) VALUES(cast(now() as datetime), cast(now() as datetime), '#{@title}', '#{@body}', '#{@filename}', '#{@user_id}')")
 
+    # トップにリダイレクト
     redirect '/'
   end
-end
 
-#binding.pry
+  #投稿削除
+  post '/delete' do
+    #記事のIDを受け取る
+    @post_id = params[:post_id]
+    # セッションのユーザーIDと記事のIDで
+    # 検索して一致すれば DBのrowを削除
+    db.xquery("DELETE FROM posts WHERE user_id = ? AND id = ?", session[:user_id], @post_id)
+
+    # トップにリダイレクト
+    redirect '/'
+  end
+
+
+  #ユーザー登録ページ
+  get '/register' do
+    redirect '/' if login?
+    erb :register
+  end
+
+  #ユーザー登録
+  post '/register' do
+
+    # フォームの情報を変数に入れる
+    @user_name = params[:user_name]
+    @email = params[:email]
+    @password = Digest::SHA1.hexdigest(params[:password])
+
+    #DBにユーザーデータを書き込み
+    if !@user_name.nil? && !@email.nil? && !@password.nil?
+      #ユーザー名がすでに使われていないかチェック
+      @used_names = db.xquery("SELECT * FROM users where user_name = ?", @user_name).to_a.first
+
+      if @used_names.nil?
+        # DBに書き込みq
+        db.xquery("INSERT INTO users(created_at, update_at, user_name, password, email) VALUES(cast(now() as datetime), cast(now() as datetime), ?, ?, ? )", @user_name, @password, @email)
+
+        #ログイン
+        @user = db.xquery("SELECT * FROM users where email = ? and password = ?", @email, @password).to_a.first
+        session[:user_id] = @user['id']
+        set_user
+      end
+    end
+
+    # トップへリダイレクト
+    redirect '/'
+  end
+
+  # ログイン
+  get '/login' do
+    redirect '/' if login?
+    erb :login
+  end
+
+  post '/login' do
+    email = params[:email]
+    password = Digest::SHA1.hexdigest(params[:password])
+
+    user = db.xquery("SELECT * FROM users where email = ? and password = ?", email, password).to_a.first
+
+    if user
+      session[:user_id] = user['id']
+      redirect '/'
+    else
+      erb :login
+    end
+  end
+
+  # ログアウト
+  get '/logout' do
+    session[:user_id] = nil
+    redirect '/'
+  end
+
+
+end
