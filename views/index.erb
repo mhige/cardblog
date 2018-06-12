@@ -1,6 +1,6 @@
 <div class="py-4">
   <% if !@user.nil? %>
-    <p class="text-center">ようこそ <a href="/user/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
+    <p class="text-center">ようこそ <a href="/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
     <p class="text-center"><a class="text-center btn btn-primary" href="/logout">ログアウト</a></p>
   <% else %>
     <p class="text-center"><a class="btn btn-primary" href="/login">ログイン</a> or
@@ -13,7 +13,7 @@
 <% if !@user.nil? %>
   <!-- Button trigger modal -->
   <p class="text-center py-4">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-post">新規投稿</button>
+    <button type="button" class="btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
   </p>
 <% end %>
 
@@ -24,7 +24,7 @@
         <h1 class="text-center py-5">新着記事</h1>
         <div id="card" class="body">
           <% @new_posts_data.each do |post| %>
-            <article class="image-post">
+            <article id="<%= post['id'] %>" class="image-post">
               <div class="card-style is-surface">
                 <div class="card_surface">
                   <div class="container">
@@ -34,10 +34,19 @@
                 <div class="card_reverse">
                   <div class="container">
                     <section class="post-body">
+                      <% if post['user_id'] == session[:user_id] %>
+                        <!-- Button trigger modal -->
+                        <div class="text-center py-4">
+                          <button type="button" class="btn btn-primary edit" data-toggle="modal" data-target="#post-modal">編集</button>
+                        </div>
+                      <% end %>
                       <h1 class="post-title"><%= post['title'] %></h1>
                       <p>Posts by <a href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
-                      <p><img class="th" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/></p>
-                      <p><%= post['body'] %></p>
+                      <p class="th">
+                        <img class="th-image" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/></p>
+                      <div class="content-body">
+                        <p><%= post['body'] %></p>
+                      </div>
                     </section>
                   </div>
                 </div>
@@ -67,13 +76,14 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="new-post" tabindex="-1" role="dialog" aria-labelledby="new-post-label" aria-hidden="true">
+<!-- Modal New Post -->
+<div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-labelledby="post-label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form action="/" method="post" enctype="multipart/form-data" class="">
+      <form method="post" enctype="multipart/form-data" class="">
         <div class="modal-header">
-          <h5 class="modal-title" id="new-post-abel">新規投稿</h5>
+          <h5 class="modal-title" id="new-post-abel"><span class="new-post">新規</span>投稿<span class="edit-post">編集</span>
+          </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -87,12 +97,16 @@
           <br>
           <label>メイン画像</label>
           <input type="file" class="form-control" name="file">
+          <div class="preview"/>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">投稿</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-secondary cancel" data-dismiss="modal">キャンセル</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+</div>
+</div>
+

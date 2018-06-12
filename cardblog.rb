@@ -28,7 +28,6 @@ def login?
   !session[:user_id].nil?
 end
 
-
 #カードブログのアプリ
 class CardBlog < Sinatra::Base
   #reloader
@@ -48,37 +47,41 @@ class CardBlog < Sinatra::Base
     if login?
       set_user
     end
-    #現在のページ数
+
+    #1ページ目
     @page = 1
+
     # 新着投稿を10件取得
-    @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id  ORDER BY posts.created_at DESC LIMIT 10").to_a
+    @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id  ORDER BY posts.created_at DESC LIMIT 10").to_a
 
     erb :index
   end
 
-  # ページネーション
-  get '/page/:page_number' do
-    # 現在のページ数を取得
-    # パラメータの数字を受け取る
+  # ユーザーページ
+  get '/page/?:page_number' do
+    # URLに入れたパラメータを渡す
     @page = params[:page_number].to_i
-    # MySQLのオフセットの数
-    @offset_num = (@page - 1) * 10
 
-    redirect '/' if @page == 1
-    # 該当ページから新着投稿を10件取得
-    @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 10 OFFSET #{@offset_num} ").to_a
+    if !@page.nil?
+      # MySQLのオフセットの数
+      @offset_num = (@page - 1) * 10
+
+      redirect '/' if @page == 1
+      # 該当ページから新着投稿を10件取得
+      @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 10 OFFSET #{@offset_num}").to_a
+    end
 
     erb :index
   end
 
-  #ユーザーのページ
-  get '/user/:user_name' do
+  # ユーザーのページ
+  get '/:user_name' do
     # URLに入れたパラメータをユーザー名を渡す
     @user_name = params[:user_name]
 
     # URLに入れたパラメータの
     # user_idがあるか取得してみる
-    @user_id = db.xquery("SELECT id From users WHERE user_name = ?", @user_name ).to_a.first
+    @user_id = db.xquery("SELECT id From users WHERE user_name = ?", @user_name).to_a.first
 
     if !@user_id.nil?
       # 新着投稿を10件取得
@@ -97,24 +100,42 @@ class CardBlog < Sinatra::Base
   # end
 
   post '/' do
-    #投稿者のIDをセッションから取得
+    #投稿者ID（セッションから取得）
     @user_id = session[:user_id]
 
-    # 画像情報を取得
-    @filename = params[:file][:filename]
-    file = params[:file][:tempfile]
-
-    # 画像をディレクトリに配置
-    File.open("./public/img/#{@filename}", 'w') do |f|
-      f.write(file.read)
+    # 記事ID
+    if !params[:id].nil?
+      @post_id = params[:id]
+    else
+      @post_id = nil
     end
 
-    #タイトルと記事本文を変数に入れる
+    # タイトル
     @title = params[:title];
+
+    # 記事本文
     @body = params[:body];
 
+    # 画像
+    if params[:file].nil?
+      @filename = params[:updatefile]
+    else
+      @filename = params[:file][:filename]
+      file = params[:file][:tempfile]
+      # 画像をディレクトリに配置
+      File.open("./public/img/#{@filename}", 'w') do |f|
+        f.write(file.read)
+      end
+    end
+
     # DBに書き込み
-    db.xquery("INSERT INTO posts(created_at, update_at, title, body, main_image_url, user_id) VALUES(cast(now() as datetime), cast(now() as datetime), '#{@title}', '#{@body}', '#{@filename}', '#{@user_id}')")
+    if !params[:id].nil?
+      # 編集
+      db.xquery("UPDATE posts SET update_at = cast(now() as datetime), title = ?, body = ?, main_image_url = ? WHERE id = ?", @title, @body, @filename, @post_id)
+    else
+      # 新規投稿
+      db.xquery("INSERT INTO posts(created_at, update_at, title, body, main_image_url, user_id) VALUES(cast(now() as datetime), cast(now() as datetime), ?, ?, ?, ?)", @title, @body, @filename, @user_id)
+    end
 
     # トップにリダイレクト
     redirect '/'
@@ -131,7 +152,6 @@ class CardBlog < Sinatra::Base
     # トップにリダイレクト
     redirect '/'
   end
-
 
   #ユーザー登録ページ
   get '/register' do
