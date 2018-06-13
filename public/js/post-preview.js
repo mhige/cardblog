@@ -45,7 +45,6 @@ $(function () {
             $content   = $cardWrap.find('.content-body p').text(),
             $image     = $cardWrap.find('.th-image').attr('src'),
             $imageName = $image.replace("\/img\/", "");
-        alert($title);
 
         //ID・画像ファイル名（非表示）
         $ttlLabel.before('<input type="text" value="' + $postID + '" name="id" class="d-none">');
