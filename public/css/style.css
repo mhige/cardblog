@@ -10,7 +10,8 @@ html {
     line-height: 1.15;
     /* 1 */
     -webkit-text-size-adjust: 100%;
-    /* 2 */ }
+    /* 2 */
+}
 
 /* Sections
    ========================================================================== */
@@ -18,7 +19,8 @@ html {
  * Remove the margin in all browsers.
  */
 body {
-    margin: 0; }
+    margin: 0;
+}
 
 /**
  * Correct the font size and margin on `h1` elements within `section` and
@@ -26,7 +28,8 @@ body {
  */
 h1 {
     font-size: 2em;
-    margin: 0.67em 0; }
+    margin: 0.67em 0;
+}
 
 /* Grouping content
    ========================================================================== */
@@ -40,7 +43,8 @@ hr {
     height: 0;
     /* 1 */
     overflow: visible;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
@@ -50,7 +54,8 @@ pre {
     font-family: monospace, monospace;
     /* 1 */
     font-size: 1em;
-    /* 2 */ }
+    /* 2 */
+}
 
 /* Text-level semantics
    ========================================================================== */
@@ -58,7 +63,8 @@ pre {
  * Remove the gray background on active links in IE 10.
  */
 a {
-    background-color: transparent; }
+    background-color: transparent;
+}
 
 /**
  * 1. Remove the bottom border in Chrome 57-
@@ -70,14 +76,16 @@ abbr[title] {
     text-decoration: underline;
     /* 2 */
     text-decoration: underline dotted;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
 b,
 strong {
-    font-weight: bolder; }
+    font-weight: bolder;
+}
 
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
@@ -89,13 +97,15 @@ samp {
     font-family: monospace, monospace;
     /* 1 */
     font-size: 1em;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * Add the correct font size in all browsers.
  */
 small {
-    font-size: 80%; }
+    font-size: 80%;
+}
 
 /**
  * Prevent `sub` and `sup` elements from affecting the line height in
@@ -106,13 +116,16 @@ sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
-    vertical-align: baseline; }
+    vertical-align: baseline;
+}
 
 sub {
-    bottom: -0.25em; }
+    bottom: -0.25em;
+}
 
 sup {
-    top: -0.5em; }
+    top: -0.5em;
+}
 
 /* Embedded content
    ========================================================================== */
@@ -120,7 +133,8 @@ sup {
  * Remove the border on images inside links in IE 10.
  */
 img {
-    border-style: none; }
+    border-style: none;
+}
 
 /* Forms
    ========================================================================== */
@@ -140,7 +154,8 @@ textarea {
     line-height: 1.15;
     /* 1 */
     margin: 0;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * Show the overflow in IE.
@@ -149,7 +164,8 @@ textarea {
 button,
 input {
     /* 1 */
-    overflow: visible; }
+    overflow: visible;
+}
 
 /**
  * Remove the inheritance of text transform in Edge, Firefox, and IE.
@@ -158,7 +174,8 @@ input {
 button,
 select {
     /* 1 */
-    text-transform: none; }
+    text-transform: none;
+}
 
 /**
  * Correct the inability to style clickable types in iOS and Safari.
@@ -167,7 +184,8 @@ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
-    -webkit-appearance: button; }
+    -webkit-appearance: button;
+}
 
 /**
  * Remove the inner border and padding in Firefox.
@@ -177,7 +195,8 @@ button::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
 [type="submit"]::-moz-focus-inner {
     border-style: none;
-    padding: 0; }
+    padding: 0;
+}
 
 /**
  * Restore the focus styles unset by the previous rule.
@@ -186,13 +205,15 @@ button:-moz-focusring,
 [type="button"]:-moz-focusring,
 [type="reset"]:-moz-focusring,
 [type="submit"]:-moz-focusring {
-    outline: 1px dotted ButtonText; }
+    outline: 1px dotted ButtonText;
+}
 
 /**
  * Correct the padding in Firefox.
  */
 fieldset {
-    padding: 0.35em 0.75em 0.625em; }
+    padding: 0.35em 0.75em 0.625em;
+}
 
 /**
  * 1. Correct the text wrapping in Edge and IE.
@@ -212,19 +233,22 @@ legend {
     padding: 0;
     /* 3 */
     white-space: normal;
-    /* 1 */ }
+    /* 1 */
+}
 
 /**
  * Add the correct vertical alignment in Chrome, Firefox, and Opera.
  */
 progress {
-    vertical-align: baseline; }
+    vertical-align: baseline;
+}
 
 /**
  * Remove the default vertical scrollbar in IE 10+.
  */
 textarea {
-    overflow: auto; }
+    overflow: auto;
+}
 
 /**
  * 1. Add the correct box sizing in IE 10.
@@ -235,14 +259,16 @@ textarea {
     box-sizing: border-box;
     /* 1 */
     padding: 0;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * Correct the cursor style of increment and decrement buttons in Chrome.
  */
 [type="number"]::-webkit-inner-spin-button,
 [type="number"]::-webkit-outer-spin-button {
-    height: auto; }
+    height: auto;
+}
 
 /**
  * 1. Correct the odd appearance in Chrome and Safari.
@@ -252,13 +278,15 @@ textarea {
     -webkit-appearance: textfield;
     /* 1 */
     outline-offset: -2px;
-    /* 2 */ }
+    /* 2 */
+}
 
 /**
  * Remove the inner padding in Chrome and Safari on macOS.
  */
 [type="search"]::-webkit-search-decoration {
-    -webkit-appearance: none; }
+    -webkit-appearance: none;
+}
 
 /**
  * 1. Correct the inability to style clickable types in iOS and Safari.
@@ -268,7 +296,8 @@ textarea {
     -webkit-appearance: button;
     /* 1 */
     font: inherit;
-    /* 2 */ }
+    /* 2 */
+}
 
 /* Interactive
    ========================================================================== */
@@ -276,13 +305,15 @@ textarea {
  * Add the correct display in Edge, IE 10+, and Firefox.
  */
 details {
-    display: block; }
+    display: block;
+}
 
 /*
  * Add the correct display in all browsers.
  */
 summary {
-    display: list-item; }
+    display: list-item;
+}
 
 /* Misc
    ========================================================================== */
@@ -290,50 +321,42 @@ summary {
  * Add the correct display in IE 10+.
  */
 template {
-    display: none; }
+    display: none;
+}
 
 /**
  * Add the correct display in IE 10.
  */
 [hidden] {
-    display: none; }
-
-.mokuji {
-    position: relative;
-    margin: 32px;
-    padding: 0;
-    padding-left: 16px;
-    border-left: 4px solid #eee; }
-
-.mokuji:before {
-    content: '目次';
-    display: block;
-    position: absolute;
-    top: -32px;
-    left: -40px;
-    padding: 2px 8px;
-    font-size: 0.8rem;
-    color: #fff;
-    background-color: #464646; }
-
-.mokuji li {
-    margin-bottom: 2px; }
-
-.mokuji li a {
-    color: #666; }
-
-.master .body {
-    margin: 0 auto;
-    padding: 0; }
-
-.master .card-style {
-    margin: 0 auto; }
-
-.master .turn-btn {
-    margin-bottom: 64px; }
+    display: none;
+}
 
 /* ///////////////////////////////////////////
-デフォルトセッティング
+レイアウト
+/////////////////////////////////////////// */
+
+/* サイドバー固定でメインカラムは100% */
+.column-wrap {
+    box-sizing: border-box;
+    width: 100%;
+}
+.side-column {
+    width: 300px;
+}
+.main-column {
+    box-sizing: border-box;
+    width: calc(100% - 300px);
+}
+@media only screen and (max-width: 768px) {
+    .side-column {
+        display: none !important;
+    }
+    .main-column {
+        width: auto;
+    }
+}
+/* ///////////////////////////////////////////
+カードのスタイル
 /////////////////////////////////////////// */
 /* 変数 */
 /* カードは白銀比の1.414（黄金比にする場合は1.618） */
@@ -341,58 +364,73 @@ template {
 .card-style {
     display: block;
     position: relative;
-    width: 280px; }
+    width: 280px;
+}
 
 .card-style .card_surface,
 .card-style .card_reverse {
     overflow: hidden;
     /* カードの形 */
     width: 280px;
-    height: calc( 280px * 1.414 );
+    height: calc(280px * 1.414);
     border: 1px solid #eee;
     border-radius: 16px;
-    box-shadow: 0px 0px 16px -4px rgba(0, 0, 0, 0.1); }
+    box-shadow: 0px 0px 16px -4px rgba(0, 0, 0, 0.1);
+}
 
 .card_reverse {
     /* ウラ面は見えないようにセット */
     position: absolute;
     top: 0;
-    left: 0; }
+    left: 0;
+}
 
 /* めくるボタン */
 .turn-btn {
     display: block;
-    margin: 10px;
+    margin: 10px 4px;
     padding: 4px 8px;
     border: none;
     border-radius: 4px;
     text-align: center;
     color: #fff;
-    background-color: #09BE61; }
-
+    background-color: #007bff;
+}
 .turn-btn .fas {
-    margin-right: 2px; }
+    margin-right: 2px;
+}
+.turn-btn.trash {
+    background-color: #aaa;
+}
 
 .turn-btn:hover {
-    opacity: 0.9; }
+    opacity: 0.9;
+}
+.turn-btn:focus {
+    outline: none;
+    opacity: 0.95;
+}
 
 /* カードのコンテナ */
 .card_surface .container,
 .card_reverse .container {
     display: flex;
     justify-content: center;
-    height: calc( 280px * 1.414 );
+    height: calc(280px * 1.414);
     margin: 0 auto;
-    padding: 0; }
+    padding: 0;
+}
 
 /* オモテ面は上下中央揃え */
 .card_surface .container {
-    align-items: center; }
+    align-items: center;
+}
 
 /* ウラ面は、カード内でYスクロール可能 */
 .is-reverse .card_reverse .container {
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch; }
+    -webkit-overflow-scrolling: touch;
+}
 
 /* ///////////////////////////////////////////
 クリックアニメーション
@@ -401,23 +439,27 @@ template {
 .is-surface .card_surface {
     opacity: 1;
     transform: rotateY(0deg);
-    transition: opacity 100ms 150ms, transform 300ms 150ms; }
+    transition: opacity 100ms 150ms, transform 300ms 150ms;
+}
 
 .is-surface .card_reverse {
     opacity: 0;
     transform: rotateY(90deg);
-    transition: opacity 50ms 200ms, transform 300ms; }
+    transition: opacity 50ms 200ms, transform 300ms;
+}
 
 /* ウラ面の表示 */
 .is-reverse .card_surface {
     opacity: 0;
     transform: rotateY(90deg);
-    transition: opacity 50ms 200ms, transform 300ms; }
+    transition: opacity 50ms 200ms, transform 300ms;
+}
 
 .is-reverse .card_reverse {
     opacity: 1;
     transform: rotateY(0deg);
-    transition: opacity 100ms 150ms, transform 300ms 150ms; }
+    transition: opacity 100ms 150ms, transform 300ms 150ms;
+}
 
 /* ///////////////////////////////////////////
 カードスタイルは２種類
@@ -437,7 +479,8 @@ URL記事・・・　　.link-post
 /////////////////////////////////////////// */
 /* 通常記事 /////////////////////////////////*/
 .post .card_surface .container {
-    margin: 0 10px; }
+    margin: 0 10px;
+}
 
 .card_surface .post-title {
     font-size: 1rem;
@@ -445,16 +488,19 @@ URL記事・・・　　.link-post
     text-align: justify;
     font-weight: normal;
     letter-spacing: 0.2em;
-    color: #444; }
+    color: #444;
+}
 
 /* 画像記事 /////////////////////////////////*/
 .image-post .card_surface .container {
-    margin: 0; }
+    margin: 0;
+}
 
 .image-post .card_surface .container img {
     width: 100%;
     height: 100%;
-    object-fit: cover; }
+    object-fit: cover;
+}
 
 /* ///////////////////////////////////////////
 ウラ面
@@ -464,28 +510,29 @@ URL記事・・・　　.link-post
     line-height: 1.6;
     font-size: 1rem;
     color: #333;
-    letter-spacing: 0; }
+    letter-spacing: 0;
+}
 
 .card_reverse .post-title {
     font-size: 1.0rem;
     line-height: 1.3;
     text-align: left;
     letter-spacing: 0;
-    color: #444; }
+    color: #444;
+}
 
 .card_reverse .post-body img {
     display: block;
-    width: 100%; }
+    width: 100%;
+}
 
 /* 通常記事 /////////////////////////////////*/
 .post .card_reverse .post-title {
     font-size: 1.2rem;
-    font-weight: normal; }
+    font-weight: normal;
+}
 
 /* 画像記事 /////////////////////////////////*/
 .image-post .card_reverse .post-title {
-    font-weight: normal; }
-
-/*  */
-
-/*# sourceMappingURL=style.css.map */
+    font-weight: normal;
+}

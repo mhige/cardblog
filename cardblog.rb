@@ -28,6 +28,12 @@ def login?
   !session[:user_id].nil?
 end
 
+#1ページに表示する記事数
+def posts_num_pages
+  # MySQLのリミットの数
+  @limit_num = 10
+end
+
 #カードブログのアプリ
 class CardBlog < Sinatra::Base
   #reloader
@@ -51,46 +57,75 @@ class CardBlog < Sinatra::Base
     #1ページ目
     @page = 1
 
+    # ページタイトル
+    @page_title = '新着記事'
+
+    # 記事数
+    posts_num_pages
+
     # 新着投稿を10件取得
-    @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id  ORDER BY posts.created_at DESC LIMIT 10").to_a
+    @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id  ORDER BY posts.created_at DESC LIMIT #{@limit_num}").to_a
 
     erb :index
   end
 
-  # ユーザーページ
+  # 2ページ以降
   get '/page/?:page_number' do
-    # URLに入れたパラメータを渡す
+    # ログイン確認とユーザーセット
+    if login?
+      set_user
+    end
+
+    # ページ番号
     @page = params[:page_number].to_i
 
+    # ページタイトル
+    @page_title = '新着記事｜' + @page.to_s + 'ページ目'
+
     if !@page.nil?
+      # 記事数
+      posts_num_pages
+
       # MySQLのオフセットの数
       @offset_num = (@page - 1) * 10
 
       redirect '/' if @page == 1
       # 該当ページから新着投稿を10件取得
-      @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 10 OFFSET #{@offset_num}").to_a
+      @new_posts_data = db.xquery("SELECT posts.id, posts.created_at, posts.update_at, user_id, title, body, main_image_url, user_name From posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT #{@limit_num} OFFSET #{@offset_num}").to_a
     end
 
     erb :index
   end
 
   # ユーザーのページ
-  get '/:user_name' do
-    # URLに入れたパラメータをユーザー名を渡す
+  get '/user/:user_name' do
+    # ログイン確認とユーザーセット
+    if login?
+      set_user
+    end
+
+    # URLパラメータを渡す
     @user_name = params[:user_name]
 
-    # URLに入れたパラメータの
-    # user_idがあるか取得してみる
+    # user_idがDBにあるか確認
     @user_id = db.xquery("SELECT id From users WHERE user_name = ?", @user_name).to_a.first
 
     if !@user_id.nil?
+      #1ページ目
+      @page = 1
+
+      # ページタイトル
+      @page_title = @user_name.to_s + ' さんのページ'
+
+      # 記事数
+      posts_num_pages
+
       # 新着投稿を10件取得
       @new_posts_data = db.xquery("SELECT * From posts JOIN users ON posts.user_id = users.id WHERE users.id = ? ", @user_id['id']).to_a
 
-      erb :user
-    else
-      redirect '/'
+      erb :index
     end
+
   end
 
   #新規投稿

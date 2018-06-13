@@ -1,80 +1,106 @@
-<div class="py-4">
-  <% if !@user.nil? %>
-    <p class="text-center">ようこそ <a href="/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
-    <p class="text-center"><a class="text-center btn btn-primary" href="/logout">ログアウト</a></p>
-  <% else %>
-    <p class="text-center"><a class="btn btn-primary" href="/login">ログイン</a> or
-      <a class="btn btn-primary" href="/register">新規登録</a></p>
-  <% end %>
-</div>
-
-<h1 class="text-center py-4">card blog</h1>
-
-<% if !@user.nil? %>
-  <!-- Button trigger modal -->
-  <p class="text-center py-4">
-    <button type="button" class="btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
-  </p>
-<% end %>
-
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <section id="new-cards">
-        <h1 class="text-center py-5">新着記事</h1>
-        <div id="card" class="body">
-          <% @new_posts_data.each do |post| %>
-            <article id="<%= post['id'] %>" class="image-post">
-              <div class="card-style is-surface">
-                <div class="card_surface">
-                  <div class="container">
-                    <img class="th" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
-                  </div>
-                </div>
-                <div class="card_reverse">
-                  <div class="container">
-                    <section class="post-body">
-                      <% if post['user_id'] == session[:user_id] %>
-                        <!-- Button trigger modal -->
-                        <div class="text-center py-4">
-                          <button type="button" class="btn btn-primary edit" data-toggle="modal" data-target="#post-modal">編集</button>
-                        </div>
-                      <% end %>
-                      <h1 class="post-title"><%= post['title'] %></h1>
-                      <p>Posts by <a href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
-                      <p class="th">
-                        <img class="th-image" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/></p>
-                      <div class="content-body">
-                        <p><%= post['body'] %></p>
-                      </div>
-                    </section>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex flex-row flex-grow-0 justify-content-center">
-                <button class="turncard turn-btn"><i class="fas fa-arrows-alt-h"></i>めくる</button>
-                <% if post['user_id'] == session['user_id'] %>
-                  <form action="/delete" method="post" enctype="multipart/form-data">
-                    <input value="<%= post['id'] %>" name="post_id" class="d-none">
-                    <button type="submit" class="turn-btn"><i class="fas fa-trash-alt"></i></i>削除</button>
-                  </form>
-                <% end %>
-              </div>
-            </article>
-          <% end %>
-        </div>
-      </section>
+<header class="border-bottom">
+  <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-5">
+    <h1 class="align-self-center ttl"><a class="text-dark" href="/">CardBlog</a></h1>
+    <div class="align-self-center text-left">
+      <% if !@user.nil? %>
+        <span class="mx-2 px-2 py-2">ようこそ <a class="text-primary" href="/user/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</span>
+        <button type="button" class="py-1 btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
+        <span class="ml-3 px-1 py-2"><a class="text-secondary small" href="/logout"><u>ログアウト</u></a>
+      <% else %>
+        <a class="mx-1 btn btn-outline-primary" href="/login">ログイン</a>
+        <a class="mx-1 btn btn-primary" href="/register">新規登録</a>
+      <% end %>
     </div>
-    <% if @new_posts_data.size < 10 %>
-    <% else %>
-      <div class="col-12">
-        <p class="text-center">
-          <a class="btn btn-primary" href="/page/<%= @page + 1 %>">もっとみる</a>
-        </p>
-      </div>
-    <% end %>
   </div>
+</header>
+<div class="content">
+  <section id="cards-list">
+    <div class="border-bottom">
+      <div class="container-fluid px-5">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="py-2 text-left text-secondary"><%= @page_title %></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-row justify-content-start column-wrap">
+      <div class="d-flex flex-wrap flex-column justify-content-start pl-5 border-right side-column">
+        <% if !@user.nil? %>
+          <p class="pt-5 pb-2 mr-auto">ようこそ
+            <a class="text-primary" href="/user/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
+          <button type="button" class="py-1 mr-auto btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
+          <span class="px-1 py-4 mr-auto"><a class="text-secondary small" href="/logout"><u>ログアウト</u></a>
+        <% else %>
+          <a class="mt-5 mb-3 btn btn-outline-primary mr-auto" href="/login">ログイン</a>
+          <a class="btn btn-primary mr-auto" href="/register">新規登録</a>
+        <% end %>
+      </div>
+      <div class="container-fruid main-column">
+        <div class="row px-5 py-4">
+          <div class="col-12 d-flex flex-wrap flex-row justify-content-start align-items-stretch card-box">
+            <% @new_posts_data.each do |post| %>
+              <article id="<%= post['id'] %>" class="py-2 pr-4 p-md-4 image-post">
+                <div class="card-style is-surface">
+                  <div class="card_surface">
+                    <div class="container">
+                      <img class="th" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
+                    </div>
+                  </div>
+                  <div class="card_reverse">
+                    <div class="container">
+                      <section class="post-body">
+                        <% if post['user_id'] == session[:user_id] %>
+                          <!-- Button trigger modal -->
+                          <div class="text-center py-4">
+                            <button type="button" class="btn btn-primary edit" data-toggle="modal" data-target="#post-modal"><i class="fas fa-edit"></i></button>
+                          </div>
+                        <% end %>
+                        <h1 class="post-title"><%= post['title'] %></h1>
+                        <p>Posts by <a href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
+                        <p class="th">
+                          <img class="th-image" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
+                        </p>
+                        <div class="content-body">
+                          <p><%= post['body'] %></p>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-row flex-grow-0 justify-content-center">
+                  <button class="turncard turn-btn"><i class="fas fa-arrows-alt-h"></i><span class="d-none">めくる</span></button>
+                  <% if post['user_id'] == session['user_id'] %>
+                    <form action="/delete" method="post" enctype="multipart/form-data">
+                      <input value="<%= post['id'] %>" name="post_id" class="d-none">
+                      <button type="submit" class="turn-btn trash"><i class="fas fa-trash-alt"></i></i><span class="d-none">削除</span></button>
+                    </form>
+                  <% end %>
+                </div>
+              </article>
+            <% end %>
+          </div>
+        </div>
+        <% if !@new_posts_data.nil? %>
+          <div class="d-flex flex-row justify-content-center y-5">
+            <% if @new_posts_data.size == @limit_num && @page > 1 %>
+              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page - 1 %>">戻る</a>
+              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page + 1 %>">進む</a>
+            <% elsif @new_posts_data.size < @limit_num && @page > 1 %>
+              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page - 1 %>">戻る</a>
+            <% elsif @new_posts_data.size == @limit_num && @page == 1 %>
+              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page + 1 %>">進む</a>
+            <% else %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
 </div>
+<footer class="fixed-bottom">
+  <address class="pt-5 pr-3 pb-2 text-right text-secondary small">©️cardblog 2018</address>
+</footer>
 
 <!-- Modal New Post -->
 <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-labelledby="post-label" aria-hidden="true">
@@ -82,7 +108,8 @@
     <div class="modal-content">
       <form method="post" enctype="multipart/form-data" class="">
         <div class="modal-header">
-          <h5 class="modal-title" id="new-post-abel"><span class="new-post">新規</span>投稿<span class="edit-post">編集</span>
+          <h5 class="modal-title" id="new-post-abel">
+            <span class="new-post">新規</span>投稿<span class="edit-post">編集</span>
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
