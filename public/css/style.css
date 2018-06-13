@@ -390,25 +390,43 @@ template {
     display: block;
     margin: 10px 4px;
     padding: 4px 8px;
-    border: none;
+    border: 1px solid #ddd;
     border-radius: 4px;
     text-align: center;
-    color: #fff;
-    background-color: #007bff;
+    color: #999;
 }
-.turn-btn .fas {
-    margin-right: 2px;
+/*編集*/
+.turn-btn.edit {
+    /*border-color: #007bff;*/
+    /*color: #007bff;*/
 }
+/*ゴミ箱*/
 .turn-btn.trash {
     background-color: #aaa;
+    color: white;
 }
 
 .turn-btn:hover {
-    opacity: 0.9;
+    background-color: #ddd;
+    color: white;
 }
 .turn-btn:focus {
     outline: none;
     opacity: 0.95;
+}
+/* 編集ボタンのホバー */
+.turn-btn.edit:hover {
+    border-color: #007bff;
+    background-color: #007bff;
+    color: white;
+}
+
+.turn-btn .fas {
+    margin-right: 2px;
+}
+/* 編集ボタンのアイコン */
+.turn-btn .fas.fa-edit {
+    margin-left: 4px;
 }
 
 /* カードのコンテナ */

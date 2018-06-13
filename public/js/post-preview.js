@@ -38,13 +38,14 @@ $(function () {
     $('button.edit').click(function () {
         $('.modal-title .new-post').hide();
 
-        var $postBody  = $(this).closest('.post-body'), //最も近い post-body classを取得
-            $ttlLabel  = $('label:contains("タイトル")'),
+        var $cardWrap  = $(this).closest('article'), //最も近い article を取得
             $postID    = $(this).closest('article').attr('id'), //最も近い article の id の中身（記事ID）を取得
-            $title     = $postBody.find('.post-title').text(),
-            $content   = $postBody.find('.content-body p').text(),
-            $image     = $postBody.find('.th-image').attr('src'),
+            $ttlLabel  = $('label:contains("タイトル")'),
+            $title     = $cardWrap.find('.post-title').text(),
+            $content   = $cardWrap.find('.content-body p').text(),
+            $image     = $cardWrap.find('.th-image').attr('src'),
             $imageName = $image.replace("\/img\/", "");
+        alert($title);
 
         //ID・画像ファイル名（非表示）
         $ttlLabel.before('<input type="text" value="' + $postID + '" name="id" class="d-none">');
