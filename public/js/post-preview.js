@@ -85,6 +85,7 @@ $(function () {
         $('.modal-body span.err').text('');
         $('#article-image').prev('span.small.text-secondary').show();
     });
+
     //フォームのエラーチェック
     $('#post-article').submit(function() {
       var flag = 0;
@@ -103,7 +104,6 @@ $(function () {
         flag++;
       } else if( imageValue == '' && previewValue.length !== 0 ) {
         $('#article-image').prev('span.err').text('');
-        flag++;
       } else {
         $('#article-image').prev('span.err').text('');
       }
