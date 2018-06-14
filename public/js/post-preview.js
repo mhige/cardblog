@@ -33,10 +33,15 @@ $(function () {
     //新規作成ボタンを押したときの動き
     $('button.new-post').click(function () {
         $('.modal-title .edit-post').hide();
+        $('#article-title').val('');
+        $('#article-content').val('');
+        $('#article-image').val('');
+        $('.preview').html('');
     });
     //編集ボタンを押したときの動き
     $('button.edit').click(function () {
         $('.modal-title .new-post').hide();
+        $('#article-image').prev('span.small.text-secondary').hide();
 
         var $cardWrap  = $(this).closest('article'), //最も近い article を取得
             $postID    = $(this).closest('article').attr('id'), //最も近い article の id の中身（記事ID）を取得
@@ -59,7 +64,7 @@ $(function () {
         // 一回inputタグを消してもう一度作成しリセット
         var $imageInput = $('input[name="file"]');
         $imageInput.remove();
-        $('label:contains("メイン画像")').after($imageInput);
+        $('.preview').before($imageInput);
 
         // 現在指定している画像のプレビュー
         var $preview =  $('.preview');
@@ -77,5 +82,34 @@ $(function () {
         //タイトルを全て表示（"新規投稿編集"）
         $('.modal-title .new-post').show();
         $('.modal-title .edit-post').show();
+        $('.modal-body span.err').text('');
+        $('#article-image').prev('span.small.text-secondary').show();
+    });
+    //フォームのエラーチェック
+    $('#post-article').submit(function() {
+      var flag = 0;
+      var titleValue = $('#article-title').val();
+      var imageValue = $('#article-image').val();
+      var previewValue = $('.preview').html();
+
+      if( titleValue == '') {
+        $('#article-title').prev('span.err').text('記入してください');
+        flag++;
+      } else {
+        $('#article-title').prev('span.err').text('');
+      }
+      if( imageValue == '' && previewValue.length == 0 ) {
+        $('#article-image').prev('span.err').text('ファイルを選んでください');
+        flag++;
+      } else if( imageValue == '' && previewValue.length !== 0 ) {
+        $('#article-image').prev('span.err').text('');
+        flag++;
+      } else {
+        $('#article-image').prev('span.err').text('');
+      }
+      // エラーのフラグ
+      if(flag !== 0) {
+        return false;
+      }
     });
 });

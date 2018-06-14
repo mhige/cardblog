@@ -105,7 +105,7 @@
 <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-labelledby="post-label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form method="post" enctype="multipart/form-data">
+      <form id="post-article" method="post" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="new-post-abel">
             <span class="new-post">新規</span>投稿<span class="edit-post">編集</span>
@@ -116,13 +116,15 @@
         </div>
         <div class="modal-body">
           <label>タイトル</label>
-          <input type="text" class="form-control" name="title">
+          <span class="small text-secondary">必須 </span><span class="small text-danger err"></span>
+          <input id="article-title" type="text" class="form-control" name="title">
           <br>
           <label>内容</label>
-          <textarea class="form-control" name="body"></textarea>
+          <textarea id="article-content" class="form-control" name="body"></textarea>
           <br>
           <label>メイン画像</label>
-          <input type="file" class="form-control" name="file">
+          <span class="small text-secondary">必須 </span><span class="small text-danger err"></span>
+          <input id="article-image" type="file" class="form-control" name="file">
           <div class="preview"/>
         </div>
         <div class="modal-footer">
