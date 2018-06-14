@@ -7,13 +7,14 @@
         <button type="button" class="py-1 btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
         <span class="ml-3 px-1 py-2"><a class="text-secondary small" href="/logout"><u>ログアウト</u></a>
       <% else %>
+        <span class="d-none d-md-inline mx-2 px-2 py-2">アカウントをお持ちですか？</span>
         <a class="mx-1 btn btn-outline-primary" href="/login">ログイン</a>
         <a class="mx-1 btn btn-primary" href="/register">新規登録</a>
       <% end %>
     </div>
   </div>
 </header>
-<div class="content my-5">
+<div class="content mb-5">
   <section id="cards-list">
     <div class="border-bottom">
       <div class="container-fluid px-5">
@@ -27,20 +28,17 @@
     <div class="d-flex flex-row justify-content-start column-wrap">
       <div class="d-flex flex-wrap flex-column justify-content-start pl-5 border-right side-column">
         <% if !@user.nil? %>
-          <p class="pt-5 pb-2 mr-auto">ようこそ
-            <a class="text-primary" href="/user/<%= @user['user_name'] %>"><%= @user['user_name'] %></a> さん</p>
-          <button type="button" class="py-1 mr-auto btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
-          <span class="px-1 py-4 mr-auto"><a class="text-secondary small" href="/logout"><u>ログアウト</u></a>
-        <% else %>
-          <a class="mt-5 mb-3 btn btn-outline-primary mr-auto" href="/login">ログイン</a>
-          <a class="btn btn-primary mr-auto" href="/register">新規登録</a>
+          <button type="button" class="mt-5 mb-4 mr-auto btn btn-primary new-post" data-toggle="modal" data-target="#post-modal">新規投稿</button>
+          <p class="my-2 mr-auto"><a class="text-secondary" href="/user/<%= @user['user_name'] %>">自分の記事</a></p>
+          <p class="my-2 mr-auto"><a class="text-secondary" href="/">いいねした記事</a></p>
+          <p class="my-2 mr-auto"><a class="text-secondary" href="/user/gakeo">gakeoさんの記事</a></p>
         <% end %>
       </div>
       <div class="container-fruid main-column">
-        <div class="row px-5 py-4">
+        <div class="row px-2 px-lg-4 py-2 py-lg-4">
           <div class="col-12 d-flex flex-wrap flex-row justify-content-start align-items-stretch card-box">
             <% @new_posts_data.each do |post| %>
-              <article id="<%= post['id'] %>" class="py-2 pr-4 p-md-4 image-post">
+              <article id="<%= post['id'] %>" class="p-2 p-lg-3 p-xlg-4 image-post">
                 <div class="card-style is-surface">
                   <div class="card_surface">
                     <div class="container">
@@ -50,48 +48,54 @@
                   <div class="card_reverse">
                     <div class="container">
                       <section class="post-body">
-                        <h1 class="post-title"><%= post['title'] %></h1>
-                        <p>Posts by <a href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
-                        <p class="th">
+                        <p class="post-th th">
                           <img class="th-image" src="/img/<%= post['main_image_url'] %>" alt="<%= post['title'] %>"/>
                         </p>
+                        <h1 class="post-title"><%= post['title'] %></h1>
                         <div class="content-body">
                           <p><%= post['body'] %></p>
                         </div>
+                        <p class="small post-author">Posts by <a class="author-name" href="/user/<%= post['user_name'] %>"><%= post['user_name'] %></a></p>
                       </section>
                     </div>
                   </div>
                 </div>
-                <div class="d-flex flex-row flex-grow-0 justify-content-center align-items-stretch">
-                  <button class="turncard btn turn-btn"><i class="fas fa-arrows-alt-h"></i><span class="d-none">めくる</span></button>
+                <div class="d-flex flex-row flex-grow-0 justify-content-center align-items-stretch card-tools">
+                  <button class="turncard btn turn-btn">
+                    <i class="fas fa-arrows-alt-h"></i><span class="d-none">めくる</span></button>
                   <% if post['user_id'] == session['user_id'] %>
                     <button type="button" class="btn turn-btn edit" data-toggle="modal" data-target="#post-modal"><i class="fas fa-edit"></i><span class="d-none">編集</span></button>
-                    <form class="d-flex" action="/delete" method="post" enctype="multipart/form-data">
-                      <input value="<%= post['id'] %>" name="post_id" class="d-none">
-                      <button type="submit" class="btn turn-btn trash"><i class="fas fa-trash-alt"></i></i><span class="d-none">削除</span></button>
-                    </form>
+                    <button type="submit" class="btn turn-btn trash"><i class="fas fa-trash-alt"></i><span class="d-none">削除</span></button>
+                    <div class="p-2 micro-message border d-none">
+                      <span class="text-secondary small">記事を削除しますか？<br>（この操作は取り消せません）</span>
+                      <form class="d-flex" action="/delete" method="post" enctype="multipart/form-data">
+                        <input value="<%= post['id'] %>" name="post_id" class="d-none">
+                        <button class="mx-1 small turn-btn cancel">キャンセル</button>
+                        <button class="mx-1 small turn-btn trash" type="submit">削除</button>
+                      </form>
+                    </div>
                   <% end %>
-                </div>
+              </div>
               </article>
             <% end %>
-          </div>
-        </div>
-        <% if !@new_posts_data.nil? %>
-          <div class="d-flex flex-row justify-content-center my-5">
-            <% if @new_posts_data.size == @limit_num && @page > 1 %>
-              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page - 1 %>">戻る</a>
-              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page + 1 %>">進む</a>
-            <% elsif @new_posts_data.size < @limit_num && @page > 1 %>
-              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page - 1 %>">戻る</a>
-            <% elsif @new_posts_data.size == @limit_num && @page == 1 %>
-              <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/page/<%= @page + 1 %>">進む</a>
-            <% else %>
-            <% end %>
-          </div>
-        <% end %>
+            </div>
       </div>
+      <% if @new_posts_data.size > 0 %>
+        <div class="d-flex flex-row justify-content-center my-5">
+          <% if @new_posts_data.size == @limit_num && @page > 1 %>
+            <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/<%= @page_path %><%= @page - 1 %>">戻る</a>
+            <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/<%= @page_path %><%= @page + 1 %>">進む</a>
+          <% elsif @new_posts_data.size < @limit_num && @page > 1 %>
+            <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/<%= @page_path %><%= @page - 1 %>">戻る</a>
+          <% elsif @new_posts_data.size == @limit_num && @page == 1 %>
+            <a class="mx-2 px-5 py-2 btn btn-outline-primary" href="/<%= @page_path %><%= @page + 1 %>">進む</a>
+          <% else %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
-  </section>
+</div>
+</section>
 </div>
 <footer class="fixed-bottom">
   <address class="pt-5 pr-3 pb-2 text-right text-secondary small">©️cardblog 2018</address>
@@ -101,7 +105,7 @@
 <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-labelledby="post-label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form method="post" enctype="multipart/form-data" class="">
+      <form method="post" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="new-post-abel">
             <span class="new-post">新規</span>投稿<span class="edit-post">編集</span>
@@ -131,4 +135,3 @@
 </div>
 </div>
 </div>
-
