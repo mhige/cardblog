@@ -426,15 +426,16 @@ template {
 .turn-btn .fas.fa-edit {/* 編集ボタンのアイコン */
     margin-left: 4px;
 }
-.micro-message {/* 削除ボタンの吹き出し */
+.micro-message {/* ボタンの吹き出し */
     position: absolute;
-    top: 48px;
+    top: -40px;
     border-radius: 8px;
     font-size: 0.8rem;
     background-color: #fff;
 }
 .micro-message .turn-btn {
     margin-bottom: 4px;
+    cursor: pointer;
 }
 
 

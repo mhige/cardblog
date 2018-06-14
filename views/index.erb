@@ -66,12 +66,12 @@
                   <% if post['user_id'] == session['user_id'] %>
                     <button type="button" class="btn turn-btn edit" data-toggle="modal" data-target="#post-modal"><i class="fas fa-edit"></i><span class="d-none">編集</span></button>
                     <button type="submit" class="btn turn-btn trash"><i class="fas fa-trash-alt"></i><span class="d-none">削除</span></button>
-                    <div class="p-2 micro-message border d-none">
+                    <div class="p-2 micro-message border" style="display: none;">
                       <span class="text-secondary small">記事を削除しますか？<br>（この操作は取り消せません）</span>
-                      <form class="d-flex" action="/delete" method="post" enctype="multipart/form-data">
+                      <form id="delete-article" class="d-flex" action="/delete" method="post" enctype="multipart/form-data">
                         <input value="<%= post['id'] %>" name="post_id" class="d-none">
-                        <button class="mx-1 small turn-btn cancel">キャンセル</button>
                         <button class="mx-1 small turn-btn trash" type="submit">削除</button>
+                        <span class="mx-1 small turn-btn cancel">キャンセル</span>
                       </form>
                     </div>
                   <% end %>
